@@ -1,0 +1,162 @@
+'use client';
+
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { LeadForm, type LeadFormConfig } from '@/components/forms/LeadForm';
+import { Button } from '@/components/ui/Button';
+import { Placeholder } from '@/components/ui/Placeholder';
+import { Avatar, Photo } from '@/components/ui/Photo';
+import type { Author, Media, Quiz as QuizData } from '@/lib/content/types';
+import { routes } from '@/lib/routes';
+import { Dialog } from './Dialog';
+import { Quiz } from './Quiz';
+
+export type ModalRequest =
+  | {
+      type: 'lead';
+      title?: string;
+      text?: string;
+      form?: Partial<LeadFormConfig>;
+      extra?: Record<string, string>;
+    }
+  | { type: 'promo'; title: string; text?: string; term?: string; image?: Media }
+  | { type: 'installment' }
+  | { type: 'video'; caption?: string; url?: string }
+  | { type: 'employee'; employee: Author }
+  | { type: 'quiz' };
+
+type Ctx = { open: (req: ModalRequest) => void; close: () => void };
+
+const ModalContext = createContext<Ctx | null>(null);
+
+export function useModal() {
+  const ctx = useContext(ModalContext);
+  if (!ctx) throw new Error('useModal must be used inside <ModalProvider>');
+  return ctx;
+}
+
+const SIZES = { lead: 'md', promo: 'lg', installment: 'lg', video: 'sm', employee: 'md', quiz: 'xl' } as const;
+
+/** Global site modals: request, offer, financing, video review, quiz. */
+export function ModalProvider({ children, quiz }: { children: ReactNode; quiz: QuizData }) {
+  const [req, setReq] = useState<ModalRequest | null>(null);
+  const close = useCallback(() => setReq(null), []);
+  const value = useMemo<Ctx>(() => ({ open: setReq, close }), [close]);
+
+  return (
+    <ModalContext.Provider value={value}>
+      {children}
+      <Dialog
+        open={!!req}
+        onClose={close}
+        size={req ? SIZES[req.type] : 'md'}
+        label={req && 'title' in req ? req.title : req?.type === 'employee' ? req.employee.name : undefined}
+      >
+        {req && <ModalContent req={req} quiz={quiz} open={setReq} close={close} />}
+      </Dialog>
+    </ModalContext.Provider>
+  );
+}
+
+function ModalContent({
+  req,
+  quiz,
+  open,
+  close,
+}: {
+  req: ModalRequest;
+  quiz: QuizData;
+  open: (r: ModalRequest) => void;
+  close: () => void;
+}) {
+  switch (req.type) {
+    case 'lead':
+      return (
+        <>
+          <h2 className="pr-8 text-2xl font-semibold">{req.title ?? 'Get a kitchen estimate'}</h2>
+          <p className="mt-2 text-fg-muted">{req.text ?? 'Leave your contact details and an Alderline designer will get in touch.'}</p>
+          <LeadForm formId="lead" {...req.form} extra={{ title: req.title ?? '', ...req.extra }} className="mt-5" />
+        </>
+      );
+
+    case 'promo':
+      return (
+        <>
+          <h2 className="pr-8 text-2xl font-semibold">{req.title}</h2>
+          {req.text && <p className="mt-2 text-fg-muted">{req.text}</p>}
+          <Photo media={req.image} label="Offer visual" sizes="(min-width: 640px) 560px, 100vw" className="my-5 min-h-48" />
+          {req.term && <p className="text-sm text-fg-muted">{req.term}</p>}
+          <LeadForm
+            formId="promo"
+            layout="inline"
+            submitLabel="Claim this offer"
+            extra={{ promo: req.title }}
+            className="mt-4"
+          />
+        </>
+      );
+
+    case 'installment':
+      return (
+        <>
+          <h2 className="pr-8 text-2xl font-semibold">Kitchen financing</h2>
+          <p className="mt-2 text-fg-muted">
+            You can spread the cost of your kitchen over several payments. Available programs, term and down payment
+            our team will confirm when you place the order.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-sm">
+            <span className="rounded-control bg-surface px-3 py-1">Payments from $150/mo</span>
+            <span className="rounded-control bg-surface px-3 py-1">Terms are fixed in the contract</span>
+          </div>
+          <ol className="mt-6 space-y-3 border-l border-line pl-5">
+            {[
+              ['Step 1', 'Project and price approval'],
+              ['Step 2', 'Choosing a financing plan and signing the contract'],
+              ['Step 3', 'Kitchen production'],
+              ['Step 4', 'Delivery and installation'],
+              ['Then', 'Monthly payments on schedule'],
+            ].map(([step, text]) => (
+              <li key={step}>
+                <b className="mr-2">{step}</b>
+                <span className="text-fg-muted">{text}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button
+              onClick={() =>
+                open({
+                  type: 'lead',
+                  title: 'Get financing terms',
+                  text: 'Our team will explain the available programs and calculate the payment for your kitchen.',
+                  form: { submitLabel: 'Get terms' },
+                })
+              }
+            >
+              Get terms
+            </Button>
+            <Button href={routes.payment()} variant="secondary" onClick={close}>
+              Payment & financing
+            </Button>
+          </div>
+        </>
+      );
+
+    case 'video':
+      return <Placeholder label={req.caption ? `Video review: ${req.caption}` : 'Customer video review'} ratio="9/16" />;
+
+    case 'employee':
+      return (
+        <div className="grid gap-5 sm:grid-cols-[160px_1fr]">
+          <Avatar name={req.employee.name} media={req.employee.photo} className="size-40 text-4xl" />
+          <div>
+            <h2 className="pr-8 text-2xl font-semibold">{req.employee.name}</h2>
+            {req.employee.role && <p className="mt-1 text-fg-muted">{req.employee.role}</p>}
+            {req.employee.text && <p className="mt-4">{req.employee.text}</p>}
+          </div>
+        </div>
+      );
+
+    case 'quiz':
+      return <Quiz data={quiz} />;
+  }
+}

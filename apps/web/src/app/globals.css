@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+/*
+ * Alderline design tokens.
+ * For now this is a neutral gray wireframe based on the prototype. Final values will come from Figma:
+ * recolor ONLY here; components use token-based utilities
+ * (bg-surface, text-fg-muted, rounded-card, max-w-site, etc.).
+ */
+@theme {
+  /* Typography */
+  --font-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Colors: surfaces and text */
+  --color-bg: #ffffff;
+  --color-fg: #1d1d1d;
+  --color-fg-muted: #6b6b6b;
+  --color-line: #d9d9d9;
+  --color-surface: #f4f4f4;
+  --color-surface-strong: #e9e9e9;
+
+  /* Accents */
+  --color-primary: #1d1d1d;
+  --color-primary-hover: #000000;
+  --color-on-primary: #ffffff;
+  --color-accent: #1d1d1d;
+  --color-on-accent: #ffffff;
+
+  /* Dark blocks (lead forms, tiles) */
+  --color-inverse: #262626;
+  --color-on-inverse: #ffffff;
+  --color-on-inverse-muted: #b5b5b5;
+
+  /* States */
+  --color-success: #2e7d32;
+  --color-danger: #c62828;
+
+  /* Radii */
+  --radius-control: 999px;
+  --radius-card: 16px;
+  --radius-media: 12px;
+  --radius-block: 24px;
+
+  /* Grid */
+  --container-site: 1240px;
+  --container-prose: 720px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06);
+  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.25);
+
+  /* Animations */
+  --animate-ticker: ticker 40s linear infinite;
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  dialog::backdrop {
+    background: rgb(0 0 0 / 0.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Media placeholder (photo/video) until real assets arrive */
+  .placeholder-stripes {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--color-surface),
+      var(--color-surface) 10px,
+      var(--color-surface-strong) 10px,
+      var(--color-surface-strong) 20px
+    );
+  }
+
+  /* Horizontal strips without a scrollbar */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Article text */
+  .prose-article {
+    @apply text-[17px] leading-relaxed;
+  }
+  .prose-article > * + * {
+    @apply mt-5;
+  }
+  .prose-article h2 {
+    @apply mt-10 text-2xl font-semibold md:text-3xl;
+  }
+  .prose-article h3 {
+    @apply mt-8 text-xl font-semibold;
+  }
+  .prose-article ul {
+    @apply list-disc space-y-2 pl-6;
+  }
+  .prose-article blockquote {
+    @apply border-l-4 border-fg pl-5 text-xl italic;
+  }
+}

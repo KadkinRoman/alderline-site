@@ -1,0 +1,68 @@
+import Link from 'next/link';
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/cn';
+
+type Props = {
+  title: ReactNode;
+  text?: ReactNode;
+  /** Placeholder icon (circle) */
+  icon?: boolean;
+  number?: ReactNode;
+  media?: ReactNode;
+  footer?: ReactNode;
+  href?: string;
+  more?: string;
+  dark?: boolean;
+  className?: string;
+};
+
+/** Tile card: benefits, warranties, service items. */
+export function Tile({ title, text, icon, number, media, footer, href, more, dark, className }: Props) {
+  const content = (
+    <>
+      {media}
+      {icon && (
+        <div className={cn('mb-4 size-11 rounded-full', dark ? 'bg-on-inverse/15' : 'bg-surface-strong')} aria-hidden />
+      )}
+      {number !== undefined && <div className="mb-3 text-2xl font-semibold text-fg-muted">{number}</div>}
+      <h3 className="text-lg font-semibold">{title}</h3>
+      {text && <div className={cn('mt-2 text-[15px]', dark ? 'text-on-inverse-muted' : 'text-fg-muted')}>{text}</div>}
+      {footer}
+      {more && <span className="mt-auto pt-4 text-sm font-medium">{more}</span>}
+    </>
+  );
+
+  const cls = cn(
+    'flex h-full flex-col rounded-card p-5 md:p-6',
+    dark ? 'bg-inverse text-on-inverse' : 'bg-surface',
+    href && 'transition-shadow hover:shadow-card',
+    className,
+  );
+
+  return href ? (
+    <Link href={href} className={cls}>
+      {content}
+    </Link>
+  ) : (
+    <div className={cls}>{content}</div>
+  );
+}
+
+const gridCols = {
+  2: 'sm:grid-cols-2',
+  3: 'sm:grid-cols-2 lg:grid-cols-3',
+  4: 'sm:grid-cols-2 lg:grid-cols-4',
+  5: 'sm:grid-cols-2 lg:grid-cols-5',
+} as const;
+
+export function TileGrid({
+  cols = 3,
+  children,
+  className,
+}: {
+  cols?: keyof typeof gridCols;
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={cn('grid gap-4 md:gap-5', gridCols[cols], className)}>{children}</div>;
+}
