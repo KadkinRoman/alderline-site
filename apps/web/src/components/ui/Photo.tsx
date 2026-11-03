@@ -13,16 +13,20 @@ type Props = {
   /** `sizes` for next/image — the rendered width of the box */
   sizes?: string;
   priority?: boolean;
+  /** false — square corners (cards where the parent clips the corners) */
+  rounded?: boolean;
+  /** true — the box is absolutely positioned (background photo; the parent is `relative`) */
+  absolute?: boolean;
   className?: string;
 };
 
 /** Photo box: next/image (object-cover) when there is a file, otherwise a placeholder of the same shape. */
-export function Photo({ media, label, ratio, sizes = '100vw', priority, className }: Props) {
-  if (!media?.url) return <Placeholder label={label} ratio={ratio} className={className} />;
+export function Photo({ media, label, ratio, sizes = '100vw', priority, rounded = true, absolute, className }: Props) {
+  if (!media?.url) return <Placeholder label={label} ratio={ratio} className={cn(!rounded && 'rounded-none border-0', className)} />;
   return (
     <div
       style={ratio ? { aspectRatio: ratio } : undefined}
-      className={cn('relative overflow-hidden rounded-media bg-surface', className)}
+      className={cn(absolute ? 'absolute' : 'relative', 'overflow-hidden bg-surface', rounded && 'rounded-media', className)}
     >
       <Image src={media.url} alt={media.alt ?? label} fill sizes={sizes} priority={priority} className="object-cover" />
     </div>

@@ -25,7 +25,9 @@ export function HeroVideo({
         media={staticPhoto('hero.jpg', 'Light custom kitchen with a wooden countertop')}
         label="Alderline kitchen"
         priority
-        className="absolute inset-0 -z-20 rounded-none"
+        absolute
+        rounded={false}
+        className="inset-0 -z-20"
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-inverse/85 via-inverse/70 to-inverse/40" aria-hidden />
       <Container className="flex min-h-[520px] items-center py-16 md:min-h-[640px]">

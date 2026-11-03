@@ -98,15 +98,15 @@ export default async function AboutPage() {
               </Button>
             </div>
           </div>
-          <Photo media={staticPhoto('workshop-2.jpg', 'Solid wood boards in the workshop')} label="Workshop" ratio="16/10" sizes="(min-width: 1024px) 600px, 100vw" />
+          <Photo media={staticPhoto('workshop-2.jpg', 'Cutting board on the workshop bench')} label="Workshop" ratio="16/10" sizes="(min-width: 1024px) 600px, 100vw" />
         </div>
         <TileGrid cols={4} className="mt-8">
           {(
             [
-              ['Modern equipment', 'workshop-3.jpg'],
+              ['Modern equipment', 'workshop-1.jpg'],
               ['Quality control', 'workshop-4.jpg'],
-              ['Materials storage', 'materials.jpg'],
-              ['In-house team', 'workshop-1.jpg'],
+              ['Materials storage', 'workshop-2.jpg'],
+              ['In-house team', 'workshop-3.jpg'],
             ] as const
           ).map(([t, img]) => (
             <Tile key={t} title={t} media={<Photo media={staticPhoto(img, t)} label={t} sizes="300px" className="mb-4 min-h-36" />} />

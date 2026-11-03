@@ -13,7 +13,7 @@ export function PromoCard({ promo, showTerm, period }: { promo: Promo; showTerm?
   const term = promoTerm(promo.endsAt, period);
   return (
     <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-bg">
-      <Photo media={promo.image} label="Offer visual" ratio="16/10" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 88vw" className="rounded-none" />
+      <Photo media={promo.image} label="Offer visual" ratio="16/10" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 88vw" rounded={false} />
       <span className="absolute top-3 left-3">
         <Badge tone="light">{promo.kind === 'gift' ? 'Gift' : 'Sale'}</Badge>
       </span>
@@ -55,7 +55,7 @@ export function ReviewCard({ review }: { review: Review }) {
         modal={{ type: 'video', caption: review.caption, url: review.videoUrl }}
         className="placeholder-stripes group relative flex aspect-[9/16] w-full flex-col items-center justify-center overflow-hidden rounded-card border border-line text-fg-muted"
       >
-        {review.photo && <Photo media={review.photo} label={review.caption} sizes="300px" className="absolute inset-0 rounded-none" />}
+        {review.photo && <Photo media={review.photo} label={review.caption} sizes="300px" absolute rounded={false} className="inset-0" />}
         <span className="flex size-14 items-center justify-center rounded-full bg-bg text-xl text-fg shadow-card transition-transform group-hover:scale-110">
           ▶
         </span>

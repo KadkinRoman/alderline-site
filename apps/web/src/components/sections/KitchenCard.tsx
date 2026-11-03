@@ -15,7 +15,7 @@ export function KitchenCard({ kitchen }: { kitchen: Kitchen }) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-card border border-line bg-bg">
       <Link href={href} className="relative block" tabIndex={-1} aria-hidden>
-        <Photo media={kitchen.gallery[0]} label="Kitchen photo" ratio="4/3" sizes="(min-width: 1280px) 300px, (min-width: 640px) 50vw, 85vw" className="rounded-none" />
+        <Photo media={kitchen.gallery[0]} label="Kitchen photo" ratio="4/3" sizes="(min-width: 1280px) 300px, (min-width: 640px) 50vw, 85vw" rounded={false} />
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           {discount > 0 && <Badge>−{discount}%</Badge>}
           {kitchen.badge && <Badge tone="light">{kitchen.badge}</Badge>}

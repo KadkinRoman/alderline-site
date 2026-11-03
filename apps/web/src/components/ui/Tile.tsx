@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 type Props = {
   title: ReactNode;
   text?: ReactNode;
-  /** Placeholder icon (circle) */
+  /** Check-mark icon in a circle */
   icon?: boolean;
   number?: ReactNode;
   media?: ReactNode;
@@ -22,7 +22,11 @@ export function Tile({ title, text, icon, number, media, footer, href, more, dar
     <>
       {media}
       {icon && (
-        <div className={cn('mb-4 size-11 rounded-full', dark ? 'bg-on-inverse/15' : 'bg-surface-strong')} aria-hidden />
+        <div className={cn('mb-4 flex size-11 items-center justify-center rounded-full', dark ? 'bg-on-inverse/15' : 'bg-surface-strong')} aria-hidden>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 10.5l4 4 8-9" />
+          </svg>
+        </div>
       )}
       {number !== undefined && <div className="mb-3 text-2xl font-semibold text-fg-muted">{number}</div>}
       <h3 className="text-lg font-semibold">{title}</h3>

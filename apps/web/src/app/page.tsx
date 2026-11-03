@@ -156,7 +156,7 @@ export default async function HomePage() {
               </Button>
             </div>
           </div>
-          <Photo media={staticPhoto('workshop-2.jpg', 'Solid wood boards in the workshop')} label="Workshop" ratio="16/10" sizes="(min-width: 1024px) 600px, 100vw" />
+          <Photo media={staticPhoto('workshop-1.jpg', 'Hand plane and wood shavings on the workbench')} label="Workshop" ratio="16/10" sizes="(min-width: 1024px) 600px, 100vw" />
         </div>
         <TileGrid cols={4} className="mt-8">
           <Tile title="Modern equipment" text="Precise machining and consistent quality." />
