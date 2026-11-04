@@ -4,14 +4,17 @@ import { cn } from '@/lib/cn';
 import type { Faq as FaqItem, OrderStage, Spec } from '@/lib/content/types';
 
 /** Steps (order, payment, warranty…): 01, 02, 03 … */
-export function Steps({ items, className }: { items: OrderStage[]; className?: string }) {
+export function Steps({ items, labels, className }: { items: OrderStage[]; labels?: string[]; className?: string }) {
   const cols =
     items.length >= 6 ? 'lg:grid-cols-6' : items.length === 5 ? 'lg:grid-cols-5' : 'lg:grid-cols-4';
   return (
     <ol className={cn('mt-8 grid gap-4 sm:grid-cols-2', cols, className)}>
       {items.map((s, i) => (
-        <li key={s.id} className="rounded-card border border-line p-5">
-          <b className="text-2xl text-fg-muted">{String(i + 1).padStart(2, '0')}</b>
+        <li key={s.id} className="relative rounded-card border border-line bg-paper p-5">
+          <div className="flex items-baseline justify-between gap-3">
+            <b className="font-display text-4xl font-normal text-accent">{String(i + 1).padStart(2, '0')}</b>
+            {labels?.[i] && <span className="text-xs font-medium tracking-wide text-fg-muted uppercase">{labels[i]}</span>}
+          </div>
           <h3 className="mt-3 font-semibold">{s.title}</h3>
           {s.text && <p className="mt-2 text-sm text-fg-muted">{s.text}</p>}
         </li>
@@ -26,7 +29,7 @@ export function Faq({ items, name = 'faq' }: { items: FaqItem[]; name?: string }
     <div className="mt-8 divide-y divide-line border-y border-line">
       {items.map((f) => (
         <details key={f.id} name={name} className="group">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-medium">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-2xl">
             {f.question}
             <span
               aria-hidden
@@ -35,7 +38,7 @@ export function Faq({ items, name = 'faq' }: { items: FaqItem[]; name?: string }
               +
             </span>
           </summary>
-          <p className="max-w-3xl pb-5 text-fg-muted">{f.answer}</p>
+          <p className="max-w-3xl pb-6 text-fg-muted md:text-lg">{f.answer}</p>
         </details>
       ))}
     </div>
@@ -46,7 +49,7 @@ export function Faq({ items, name = 'faq' }: { items: FaqItem[]; name?: string }
 export function Ticker({ items }: { items: [value: string, label: string][] }) {
   const row = items.map(([v, l]) => (
     <span key={v + l} className="flex shrink-0 items-baseline gap-2 px-6">
-      <b className="text-2xl md:text-3xl">{v}</b>
+      <b className="font-display text-3xl font-normal md:text-4xl">{v}</b>
       <span className="text-fg-muted">{l}</span>
     </span>
   ));

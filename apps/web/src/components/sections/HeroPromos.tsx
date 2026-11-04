@@ -11,8 +11,8 @@ export async function HeroPromos() {
   const term = promoTerm(undefined, settings.promoPeriod);
 
   return (
-    <aside className="rounded-card bg-on-inverse/10 p-5 text-on-inverse">
-      <div className="text-sm text-on-inverse-muted">{term ? `Offers · ${term.replace(/^Offer valid /, '')}` : 'Offers'}</div>
+    <aside className="hidden rounded-card border border-on-inverse/15 bg-inverse/40 p-6 text-on-inverse backdrop-blur-md lg:block">
+      <div className="text-xs font-semibold tracking-[0.18em] text-on-inverse-muted uppercase">{term ? `Offers · ${term.replace(/^Offer valid /, '')}` : 'Offers'}</div>
       <ul className="mt-3 space-y-2">
         {promos.slice(0, 3).map((p) => (
           <li key={p.slug}>

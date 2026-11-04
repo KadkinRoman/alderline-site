@@ -1,4 +1,5 @@
 import { ModalButton } from '@/components/modals/ModalButton';
+import { CostEstimator } from '@/components/sections/CostEstimator';
 import { CtaForm } from '@/components/sections/Cta';
 import { PageHero } from '@/components/sections/Hero';
 import { staticPhoto } from '@/components/ui/Photo';
@@ -61,6 +62,10 @@ export default async function PaymentPage() {
       </Section>
 
       <StepsSection group="payment" title="How payment works" />
+
+      <div className="bg-surface/60">
+        <CostEstimator />
+      </div>
 
       <CtaForm
         title="Not sure which option to choose?"

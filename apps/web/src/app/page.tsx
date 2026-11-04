@@ -1,10 +1,12 @@
 import { LeadForm } from '@/components/forms/LeadForm';
 import { ModalButton } from '@/components/modals/ModalButton';
 import { ProjectCase } from '@/components/sections/Cards';
+import { CostEstimator } from '@/components/sections/CostEstimator';
 import { CtaBox, FinalCta, QuizCta } from '@/components/sections/Cta';
 import { HeroVideo } from '@/components/sections/Hero';
 import { HeroPromos } from '@/components/sections/HeroPromos';
 import { KitchenRail } from '@/components/sections/KitchenRail';
+import { ProofStrip } from '@/components/sections/ProofStrip';
 import {
   BlogTeaserSection,
   CatalogRailSection,
@@ -17,58 +19,77 @@ import { Button } from '@/components/ui/Button';
 import { Section, SectionHeading } from '@/components/ui/layout';
 import { Photo, staticPhoto } from '@/components/ui/Photo';
 import { Tile, TileGrid } from '@/components/ui/Tile';
-import { getHitKitchens, getMainPromo, getProjects, getSettings } from '@/lib/content';
-import { promoTerm } from '@/lib/format';
+import { getHitKitchens, getProjects, getSettings } from '@/lib/content';
+import { formatPrice } from '@/lib/format';
 import { routes } from '@/lib/routes';
+import { PRICE_FROM, REVIEW_SUMMARY } from '@/lib/trust';
+
+/** Timeline of the home "order stages" (6 steps in the CMS) */
+const STEP_LABELS = ['Day 1', 'Day 2–3', 'Week 1', 'Week 1', 'Weeks 2–4', 'Week 5'];
 
 export default async function HomePage() {
-  const [settings, mainPromo, projects, hits] = await Promise.all([
-    getSettings(),
-    getMainPromo(),
-    getProjects(2),
-    getHitKitchens(10),
-  ]);
+  const [settings, projects, hits] = await Promise.all([getSettings(), getProjects(2), getHitKitchens(10)]);
 
   return (
     <>
-      {/* 1 · Hero */}
+      {/* 1 · Hero: specific value claim, price anchor, two clear actions, proof next to them */}
       <HeroVideo
-        title="Custom kitchens in Portland, OR"
-        lead="We design your kitchen around your space, build it in our own workshop and install it start to finish."
+        eyebrow="Custom kitchens · Portland, Oregon"
+        title={
+          <>
+            Kitchens made to measure, <em className="text-on-inverse/80">built in our own workshop</em>
+          </>
+        }
+        lead={`Designed around your room, built in Portland and installed in about five weeks. Complete kitchens from ${formatPrice(PRICE_FROM)}, with a 5-year warranty.`}
         aside={<HeroPromos />}
         actions={
           <>
-            <Button href={routes.catalog()} variant="contrast" size="lg">
-              Find your kitchen
+            <Button href={`${routes.home()}#estimate`} variant="contrast" size="lg">
+              Estimate my kitchen
             </Button>
-            {mainPromo && (
-              <ModalButton
-                variant="inverse"
-                size="lg"
-                modal={{
-                  type: 'promo',
-                  title: mainPromo.title,
-                  text: mainPromo.text,
-                  term: promoTerm(mainPromo.endsAt, settings.promoPeriod),
-                }}
-              >
-                Claim your {mainPromo.title.toLowerCase()}
-              </ModalButton>
-            )}
+            <Button href={routes.catalog()} variant="inverse" size="lg">
+              Browse 30 designs
+            </Button>
           </>
+        }
+        proof={
+          <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span>
+              <span className="text-star" aria-hidden>
+                ★★★★★{' '}
+              </span>
+              {REVIEW_SUMMARY.rating} from {REVIEW_SUMMARY.count} reviews
+            </span>
+            <span aria-hidden className="hidden h-4 w-px bg-on-inverse/25 sm:block" />
+            <span>Free measurement &amp; 3D design</span>
+            <span aria-hidden className="hidden h-4 w-px bg-on-inverse/25 sm:block" />
+            <span>No-obligation quote in 48 hours</span>
+          </span>
         }
       />
 
-      {/* 2 · Catalog */}
+      {/* 2 · Proof points */}
+      <ProofStrip />
+
+      {/* 3 · Catalog */}
       <CatalogRailSection />
 
-      {/* 3 · Reviews */}
+      {/* 4 · Cost estimator: the price question answered before the visitor has to ask */}
+      <div className="bg-surface/60">
+        <CostEstimator />
+      </div>
+
+      {/* 5 · Reviews */}
       <ReviewsSection />
 
-      {/* 4 · Benefits (bento) */}
+      {/* 6 · Benefits (bento) */}
       <Section>
-        <SectionHeading title="Why choose Alderline" subtitle="Everything your kitchen needs, in one place." />
-        <div className="mt-8 grid gap-4 md:grid-cols-6 md:gap-5">
+        <SectionHeading
+          eyebrow="Why Alderline"
+          title="One studio, from the first sketch to the last hinge"
+          subtitle="No middlemen between your designer, the people who build your cabinets and the crew that installs them."
+        />
+        <div className="mt-10 grid gap-4 md:grid-cols-6 md:gap-5">
           <Tile
             dark
             icon
@@ -88,8 +109,8 @@ export default async function HomePage() {
           />
           <Tile
             icon
-            href="/about#team"
-            title="Experienced specialists"
+            href={`${routes.about()}#team`}
+            title="One team, start to finish"
             text="Designers, production engineers, a workshop crew and an installation team."
             more="Meet the team →"
             className="md:col-span-2"
@@ -98,77 +119,49 @@ export default async function HomePage() {
             icon
             href={routes.warranty()}
             title="5-year warranty"
-            text="We stand behind every cabinet we build."
+            text="We stand behind every cabinet we build — and come back if something needs adjusting."
             more="About the warranty →"
             className="md:col-span-2"
           />
           <Tile
             icon
             href={routes.payment()}
-            title="Financing"
-            text="Flexible payment options, so you don't have to pay the full amount up front."
+            title="0% financing available"
+            text="Spread the cost over 14 months, so you don't have to pay the full amount up front."
             more="Payment & financing →"
             className="md:col-span-2"
           />
         </div>
       </Section>
 
-      {/* 5 · Lead form: compare quotes */}
-      <CtaBox
-        title="Already have a quote from another company? We'll offer a version up to 20% less"
-        text="If you already have a sketch or a quote for your kitchen, send it to us. The Alderline team will review it and suggest alternative specifications and a cost estimate."
-        aside={
-          <ModalButton
-            variant="contrast"
-            size="lg"
-            className="w-full"
-            modal={{
-              type: 'lead',
-              title: 'We\'ll offer a version up to 20% less',
-              text: 'Attach a sketch or a quote from another company. The Alderline team will suggest alternative specifications and a cost estimate.',
-              form: { formId: 'compare', submitLabel: 'Claim this offer' },
-            }}
-          >
-            Claim this offer
-          </ModalButton>
-        }
-      />
+      {/* 7 · Process with a timeline */}
+      <StepsSection
+        group="home"
+        eyebrow="How it works"
+        title="Your kitchen in about five weeks"
+        subtitle="A fixed price and a fixed installation date in your contract — no surprises halfway through."
+        labels={STEP_LABELS}
+      >
+        <ModalButton
+          size="lg"
+          modal={{
+            type: 'lead',
+            title: 'Book a free design consultation',
+            text: 'A designer will call you back, answer your questions and set up a free measurement and 3D design.',
+            form: { formId: 'zamer', submitLabel: 'Book my consultation' },
+          }}
+        >
+          Start with a free consultation
+        </ModalButton>
+      </StepsSection>
 
-      {/* 6 · Offers */}
-      <PromosRailSection />
-
-      {/* 7 · Estimate (quiz) */}
-      <QuizCta />
-
-      {/* 8 · Workshop */}
-      <Section id="workshop">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
-          <div>
-            <SectionHeading title="The Alderline workshop in Portland" />
-            <p className="mt-4 text-lg">
-              We build our kitchens ourselves. That lets us control every stage of production, from preparing parts
-              to inspecting finished cabinets before they ship to the customer.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button href={`${routes.about()}#workshop`}>Learn more about the workshop</Button>
-              <Button href={routes.materials()} variant="secondary">
-                Materials
-              </Button>
-            </div>
-          </div>
-          <Photo media={staticPhoto('workshop-1.jpg', 'Hand plane and wood shavings on the workbench')} label="Workshop" ratio="16/10" sizes="(min-width: 1024px) 600px, 100vw" />
-        </div>
-        <TileGrid cols={4} className="mt-8">
-          <Tile title="Modern equipment" text="Precise machining and consistent quality." />
-          <Tile title="Quality control" text="We inspect every part of your kitchen before delivery and installation." />
-          <Tile title="Experienced specialists" text="We handle standard and highly custom projects alike." />
-          <Tile title="Made to order" text="Your project defines the dimensions, materials and construction." />
-        </TileGrid>
-      </Section>
-
-      {/* 9 · Our projects */}
+      {/* 8 · Our projects */}
       <Section>
-        <SectionHeading title="Our projects" subtitle="Over 1,000 Alderline kitchens built: style, layout, dimensions and cost." />
+        <SectionHeading
+          eyebrow="Recent work"
+          title="Kitchens we built this year"
+          subtitle="Real layouts, real budgets: what the brief was, what we suggested and what it cost."
+        />
         <div className="mt-4">
           {projects.map((p) => (
             <ProjectCase key={p.slug} project={p} />
@@ -179,56 +172,102 @@ export default async function HomePage() {
         </Button>
       </Section>
 
-      {/* 10 · Order stages */}
-      <StepsSection group="home" title="From idea to finished kitchen" />
+      {/* 9 · Lead form: compare quotes */}
+      <CtaBox
+        eyebrow="Price match"
+        title="Already have a quote from another company? We'll beat it by up to 20%"
+        text="Send us the sketch or the quote. We'll review the specification and come back with a like-for-like alternative and a cost estimate."
+        aside={
+          <ModalButton
+            variant="contrast"
+            size="lg"
+            className="w-full"
+            modal={{
+              type: 'lead',
+              title: "We'll beat your quote by up to 20%",
+              text: 'Attach a sketch or a quote from another company. The Alderline team will suggest alternative specifications and a cost estimate.',
+              form: { formId: 'compare', submitLabel: 'Send my quote' },
+            }}
+          >
+            Send us your quote
+          </ModalButton>
+        }
+      />
 
-      {/* 11 · Measurement */}
+      {/* 10 · Offers */}
+      <PromosRailSection />
+
+      {/* 11 · Quiz */}
+      <QuizCta />
+
+      {/* 12 · Workshop */}
+      <Section id="workshop">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div>
+            <SectionHeading eyebrow="Made in Portland" title="The Alderline workshop" />
+            <p className="mt-5 text-lg text-fg-muted">
+              We build our kitchens ourselves. That lets us control every stage of production, from preparing parts to
+              inspecting finished cabinets before they ship to your home.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button href={`${routes.about()}#workshop`}>Inside the workshop</Button>
+              <Button href={routes.materials()} variant="secondary">
+                Materials
+              </Button>
+            </div>
+          </div>
+          <Photo
+            media={staticPhoto('workshop-1.jpg', 'Hand plane and wood shavings on the workbench')}
+            label="Workshop"
+            ratio="16/11"
+            sizes="(min-width: 1024px) 620px, 100vw"
+          />
+        </div>
+        <TileGrid cols={4} className="mt-10">
+          <Tile title="Precision machining" text="CNC-cut panels with tolerances under a millimetre." />
+          <Tile title="Quality control" text="Every cabinet is assembled and checked before delivery." />
+          <Tile title="Experienced makers" text="We handle standard and highly custom projects alike." />
+          <Tile title="Made to order" text="Your project defines the dimensions, materials and construction." />
+        </TileGrid>
+      </Section>
+
+      {/* 13 · Measurement */}
       <CtaBox
         dark={false}
+        eyebrow="Free, no obligation"
         title="Free measurement and 3D design"
-        text="We measure for free and prepare a detailed 3D design for you on the spot. Within two hours your designer will price several options and help you choose materials, hardware and colors."
+        text="A designer measures your room and prepares a detailed 3D design on the spot. Within two hours you get several priced options to compare."
         actions={
           <Button href={routes.zamer()} variant="secondary">
-            Learn about the service
+            How the visit works
           </Button>
         }
         aside={
-          <div className="rounded-card bg-bg p-5 md:p-6">
-            <h3 className="text-lg font-semibold">Not sure where to start? Invite a designer for a free measurement</h3>
+          <div className="rounded-card bg-paper p-5 shadow-card md:p-6">
+            <h3 className="text-lg font-semibold">Book a designer visit</h3>
             <p className="mt-2 text-sm text-fg-muted">
-              A specialist will bring material samples, measure your space and help you choose a layout.
+              We bring material samples, measure your space and help you choose a layout.
             </p>
             <LeadForm formId="zamer" layout="inline" submitLabel="Book a measurement" className="mt-4" />
           </div>
         }
       />
 
-      {/* 12 · Bestsellers */}
+      {/* 14 · Bestsellers */}
       <Section>
-        <KitchenRail title="Our bestsellers" subtitle="Designs our customers have put to the test." kitchens={hits} />
+        <KitchenRail title="Most-ordered designs" subtitle="Kitchens our customers keep coming back to." kitchens={hits} />
       </Section>
 
-      {/* 13 · Lead form: quiz */}
-      <CtaBox
-        title="Not sure which kitchen is right for you?"
-        text="Take the quiz and we'll match you with the right kitchen. It takes under a minute, and you'll get our full kitchen catalog and a 3D design of your kitchen."
-        aside={
-          <ModalButton variant="contrast" size="lg" className="w-full" modal={{ type: 'quiz' }}>
-            Get an estimate
-          </ModalButton>
-        }
-      />
-
-      {/* 14 · Blog */}
+      {/* 15 · Blog */}
       <BlogTeaserSection />
 
-      {/* 15 · FAQ */}
+      {/* 16 · FAQ */}
       <FaqSection group="home" />
 
-      {/* 16 · Final call to action */}
+      {/* 17 · Final call to action */}
       <FinalCta
         title="Let's price your kitchen"
-        text="Tell us about your space and what you have in mind. A designer will prepare a free preliminary estimate and suggest the best specification options."
+        text="Tell us about your space and what you have in mind. A designer will prepare a free preliminary estimate within 48 hours."
         socials={settings.socials}
       />
     </>

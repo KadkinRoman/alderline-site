@@ -53,7 +53,7 @@ export function ContactDock({ phone, phoneHref, socials }: { phone: string; phon
   );
 
   return (
-    <div ref={rootRef} className="fixed right-4 bottom-4 z-30 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6 print:hidden">
+    <div ref={rootRef} className="fixed right-6 bottom-6 z-30 hidden flex-col items-end gap-3 md:flex print:hidden">
       <div
         id={panelId}
         hidden={!open}

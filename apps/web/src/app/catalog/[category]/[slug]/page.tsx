@@ -25,6 +25,7 @@ import { getKitchen, getKitchenSlugs, getSimilarKitchens } from '@/lib/content';
 import { discountPercent, formatPrice, installmentFrom } from '@/lib/format';
 import { routes } from '@/lib/routes';
 import { atLeastOne } from '@/lib/static-params';
+import { REVIEW_SUMMARY } from '@/lib/trust';
 
 // The page depends entirely on the slug, and 404 and 308 must be sent as HTTP statuses (SEO), so the params
 // check is not hidden inside <Suspense>: navigating here may wait for the server. Known slugs are prerendered.
@@ -87,7 +88,7 @@ export default async function KitchenPage({ params }: Props) {
               <h1 className="mt-4 text-3xl font-semibold md:text-5xl">{kitchen.name}</h1>
               <p className="mt-2 text-fg-muted">{kitchen.shortDesc}</p>
               <div className="mt-6 flex flex-wrap items-baseline gap-x-4">
-                <b className="text-3xl">From {formatPrice(kitchen.price)}</b>
+                <b className="font-display text-4xl font-normal md:text-5xl">From {formatPrice(kitchen.price)}</b>
                 {kitchen.oldPrice && <s className="text-lg text-fg-muted">{formatPrice(kitchen.oldPrice)}</s>}
               </div>
               <div className="mt-2 text-fg-muted">
@@ -126,6 +127,17 @@ export default async function KitchenPage({ params }: Props) {
                   Book a measurement
                 </ModalButton>
               </div>
+              <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-fg-muted">
+                <li>
+                  <span className="text-star" aria-hidden>
+                    ★★★★★{' '}
+                  </span>
+                  {REVIEW_SUMMARY.rating} from {REVIEW_SUMMARY.count} reviews
+                </li>
+                <li>✓ Free measurement &amp; 3D design</li>
+                <li>✓ 5-year warranty</li>
+                <li>✓ Installed in about 5 weeks</li>
+              </ul>
               <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-card bg-surface p-4 text-sm">
                 <span>Right now you can get a free countertop or extractor hood with this kitchen.</span>
                 <Link href={routes.promos()} className="font-medium underline underline-offset-2">

@@ -12,13 +12,13 @@ import { routes } from '@/lib/routes';
 export function PromoCard({ promo, showTerm, period }: { promo: Promo; showTerm?: boolean; period?: PromoPeriod }) {
   const term = promoTerm(promo.endsAt, period);
   return (
-    <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-bg">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-paper transition-shadow hover:shadow-card">
       <Photo media={promo.image} label="Offer visual" ratio="16/10" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 88vw" rounded={false} />
       <span className="absolute top-3 left-3">
         <Badge tone="light">{promo.kind === 'gift' ? 'Gift' : 'Sale'}</Badge>
       </span>
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-semibold">{promo.title}</h3>
+        <h3 className="font-display text-2xl">{promo.title}</h3>
         <p className="mt-2 text-fg-muted">{promo.shortText}</p>
         {showTerm && term && <span className="mt-3 text-sm text-fg-muted">{term}</span>}
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
@@ -39,7 +39,7 @@ const SOURCE_LABEL = { site: 'Video review', google: 'Google', houzz: 'Houzz' } 
 function Stars({ rating }: { rating?: number }) {
   if (!rating) return null;
   return (
-    <span aria-label={`Rated ${rating} out of 5`} className="text-sm tracking-wide">
+    <span aria-label={`Rated ${rating} out of 5`} className="text-sm tracking-wide text-star">
       {'★'.repeat(rating)}
       <span className="text-fg-muted">{'★'.repeat(5 - rating)}</span>
     </span>
@@ -77,7 +77,7 @@ export function ReviewCard({ review }: { review: Review }) {
 /** Text review: name, neighborhood, source, rating, text, link to the source. */
 export function ReviewTextCard({ review }: { review: Review }) {
   return (
-    <article className="flex h-full flex-col rounded-card border border-line bg-bg p-5">
+    <article className="flex h-full flex-col rounded-card border border-line bg-paper p-6">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-semibold">{review.name}</h3>
@@ -88,7 +88,7 @@ export function ReviewTextCard({ review }: { review: Review }) {
       <div className="mt-2">
         <Stars rating={review.rating} />
       </div>
-      {review.text && <p className="mt-3 line-clamp-6 text-[15px] text-fg-muted">{review.text}</p>}
+      {review.text && <p className="mt-4 line-clamp-6 font-display text-xl leading-snug">“{review.text}”</p>}
       <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4 text-sm">
         {review.url && (
           <a href={review.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
@@ -119,7 +119,7 @@ export function PostCard({ article, withExcerpt = true }: { article: Article; wi
         <div className="mt-3 text-sm text-fg-muted">
           {article.tag.name} · <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
         </div>
-        <h3 className="mt-1 text-lg font-semibold group-hover:underline">{article.title}</h3>
+        <h3 className="mt-2 font-display text-2xl leading-tight group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4">{article.title}</h3>
         {withExcerpt && <p className="mt-2 text-fg-muted">{article.excerpt}</p>}
       </Link>
     </article>
@@ -129,10 +129,10 @@ export function PostCard({ article, withExcerpt = true }: { article: Article; wi
 /** Project case: chips, name, specs, buttons + gallery. */
 export function ProjectCase({ project }: { project: Project }) {
   return (
-    <article className="grid gap-8 border-t border-line py-10 first:border-t-0 lg:grid-cols-2">
+    <article className="group grid gap-8 border-t border-line py-12 first:border-t-0 lg:grid-cols-2 lg:gap-14">
       <div>
         <ChipList items={project.chips} />
-        <h3 className="mt-5 text-2xl font-semibold md:text-3xl">{project.title}</h3>
+        <h3 className="mt-5 font-display text-3xl md:text-4xl">{project.title}</h3>
         <p className="mt-3 text-fg-muted">{project.excerpt}</p>
         <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
           {project.specs.map((s) => (

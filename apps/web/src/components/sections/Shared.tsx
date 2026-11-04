@@ -142,17 +142,24 @@ export async function FaqSection({ group, title = 'Frequently asked questions' }
 export async function StepsSection({
   group,
   title,
+  eyebrow,
+  subtitle,
+  labels,
   children,
 }: {
   group: ContentGroup;
   title: string;
+  eyebrow?: string;
+  subtitle?: string;
+  /** Timeline label per step ("Day 1", "Week 2") */
+  labels?: string[];
   children?: ReactNode;
 }) {
   const items = await getOrderStages(group);
   return (
     <Section>
-      <SectionHeading title={title} />
-      <Steps items={items} />
+      <SectionHeading title={title} eyebrow={eyebrow} subtitle={subtitle} />
+      <Steps items={items} labels={labels} />
       {children && <div className="mt-6 flex flex-wrap gap-3">{children}</div>}
     </Section>
   );

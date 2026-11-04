@@ -29,7 +29,7 @@ export default async function MaterialsPage() {
         lead="We select cabinet fronts, carcasses, countertops, hardware and internal fittings with looks, practicality and cost in mind."
         chips={['A wide choice of finishes', 'Options at every price point', 'Mix and match materials']}
         media="Photo of material samples"
-        image={staticPhoto('materials.jpg', 'Material samples')}
+        image={staticPhoto('materials-kitchen.jpg', 'Sage green shaker kitchen with brass pendant lights')}
         actions={
           <ModalButton
             size="lg"

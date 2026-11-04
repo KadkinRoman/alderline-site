@@ -6,36 +6,44 @@ import { Photo, staticPhoto } from '@/components/ui/Photo';
 import { cn } from '@/lib/cn';
 import type { Media } from '@/lib/content/types';
 
-/** Home hero: background photo with a dark overlay + offers panel. */
+/** Home hero: full-bleed photo with a dark gradient, value claim, CTAs, proof line + offers panel. */
 export function HeroVideo({
+  eyebrow,
   title,
   lead,
   actions,
+  proof,
   aside,
 }: {
+  eyebrow?: ReactNode;
   title: ReactNode;
   lead: ReactNode;
   actions: ReactNode;
+  /** Under the buttons: rating, warranty, lead time */
+  proof?: ReactNode;
   /** Right side: offers panel */
   aside?: ReactNode;
 }) {
   return (
     <section className="relative isolate overflow-hidden bg-inverse text-on-inverse">
       <Photo
-        media={staticPhoto('hero.jpg', 'Light custom kitchen with a wooden countertop')}
+        media={staticPhoto('hero-kitchen.jpg', 'Dark custom kitchen with a wooden breakfast island and pendant lights')}
         label="Alderline kitchen"
         priority
         absolute
         rounded={false}
         className="inset-0 -z-20"
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-inverse/85 via-inverse/70 to-inverse/40" aria-hidden />
-      <Container className="flex min-h-[520px] items-center py-16 md:min-h-[640px]">
-        <div className={cn('grid w-full items-end gap-8', !!aside && 'lg:grid-cols-[1fr_minmax(0,360px)]')}>
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-semibold md:text-6xl">{title}</h1>
-            <p className="mt-5 text-lg text-on-inverse-muted md:text-xl">{lead}</p>
-            <div className="mt-8 flex flex-wrap gap-3">{actions}</div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-inverse/90 via-inverse/70 to-inverse/25" aria-hidden />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-inverse/60 to-transparent" aria-hidden />
+      <Container className="flex min-h-[600px] items-end pt-24 pb-14 md:min-h-[min(86vh,820px)] md:pb-20">
+        <div className={cn('grid w-full items-end gap-10', !!aside && 'lg:grid-cols-[1fr_minmax(0,340px)]')}>
+          <div className="max-w-3xl">
+            {eyebrow && <p className="text-xs font-semibold tracking-[0.2em] text-on-inverse-muted uppercase">{eyebrow}</p>}
+            <h1 className="mt-4 text-5xl leading-[0.98] md:text-7xl xl:text-[5.5rem]">{title}</h1>
+            <p className="mt-6 max-w-xl text-lg text-on-inverse/85 md:text-xl">{lead}</p>
+            <div className="mt-9 flex flex-wrap gap-3">{actions}</div>
+            {proof && <div className="mt-8 text-sm text-on-inverse-muted">{proof}</div>}
           </div>
           {aside}
         </div>
@@ -67,7 +75,7 @@ export function PageHero({ crumbs, title, lead, sub, chips, actions, media, imag
         {crumbs && <Breadcrumbs items={crumbs} />}
         <div className={cn('mt-6 grid items-center gap-8', media !== null && 'lg:grid-cols-2')}>
           <div>
-            <h1 className="text-3xl font-semibold md:text-5xl">{title}</h1>
+            <h1 className="text-4xl md:text-6xl">{title}</h1>
             {lead && <p className="mt-4 text-lg md:text-xl">{lead}</p>}
             {sub && <p className="mt-3 text-fg-muted">{sub}</p>}
             {chips && <ChipList items={chips} className="mt-5" />}

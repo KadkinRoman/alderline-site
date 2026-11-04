@@ -15,12 +15,12 @@ type SectionProps = {
   bleed?: boolean;
 };
 
-const spacingClass = { none: '', sm: 'py-6 md:py-8', md: 'py-10 md:py-14' };
+const spacingClass = { none: '', sm: 'py-8 md:py-10', md: 'py-12 md:py-20' };
 
 export function Section({ children, id, className, spacing = 'md', bleed = false }: SectionProps) {
   return (
     <section id={id} className={cn(spacingClass[spacing], className)}>
-      {bleed ? children : <Container>{children}</Container>}
+      {bleed ? children : <Container className="reveal">{children}</Container>}
     </section>
   );
 }
@@ -38,11 +38,9 @@ type HeadingProps = {
 export function SectionHeading({ title, subtitle, eyebrow, as: Tag = 'h2', className, children }: HeadingProps) {
   return (
     <div className={cn('max-w-3xl', className)}>
-      {eyebrow && <div className="mb-2 text-sm text-fg-muted">{eyebrow}</div>}
-      <Tag className={Tag === 'h1' ? 'text-3xl font-semibold md:text-5xl' : 'text-2xl font-semibold md:text-4xl'}>
-        {title}
-      </Tag>
-      {subtitle && <p className="mt-3 text-fg-muted md:text-lg">{subtitle}</p>}
+      {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
+      <Tag className={Tag === 'h1' ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl'}>{title}</Tag>
+      {subtitle && <p className="mt-4 text-fg-muted md:text-lg">{subtitle}</p>}
       {children}
     </div>
   );

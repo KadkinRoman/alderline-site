@@ -10,6 +10,13 @@ images built in GitHub Actions and published to GHCR.
 | `apps/cms` | Strapi 5 (TypeScript), SQLite in dev / PostgreSQL in prod, Navigation plugin | 1337 |
 | `apps/web` | Next.js 16 (App Router, TypeScript, Tailwind CSS 4, `src/`, Cache Components) | 3000 |
 
+Highlights:
+
+- **Warm-minimal design system** — tokens in one file (`apps/web/src/app/globals.css`), Instrument Serif + Inter via `next/font`, CSS scroll-driven reveals that respect `prefers-reduced-motion`.
+- **Conversion-first home page** — a specific value claim and a price anchor above the fold, proof points next to every call to action, an instant **cost estimator** that passes the configuration into the lead form, a process timeline and a sticky call / estimate bar on phones.
+- **Lead pipeline** — every form posts to `/api/lead`: validation, honeypot and rate limits, a CRM call with an on-disk retry queue and Telegram alerts (disabled in the demo deployment).
+- **SEO basics** — `sitemap.xml`, `robots.txt`, Open Graph image, schema.org `HomeAndConstructionBusiness` JSON-LD.
+
 All content and images are demo data. Photographs are Creative Commons licensed; credits are listed on the `/credits` page.
 
 ## Quick start

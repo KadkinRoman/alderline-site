@@ -1,52 +1,55 @@
 @import "tailwindcss";
 
 /*
- * Alderline design tokens.
- * For now this is a neutral gray wireframe based on the prototype. Final values will come from Figma:
- * recolor ONLY here; components use token-based utilities
- * (bg-surface, text-fg-muted, rounded-card, max-w-site, etc.).
+ * Alderline design tokens — "warm minimalism": warm off-white base, espresso ink, an oak accent,
+ * an editorial serif for headlines (Instrument Serif) and Inter for text. Fonts come from next/font
+ * (CSS variables --font-display / --font-text set on <html> in app/layout.tsx).
+ * Recolor ONLY here; components use token-based utilities (bg-surface, text-fg-muted, rounded-card…).
  */
 @theme {
   /* Typography */
-  --font-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-text), ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-serif), "Iowan Old Style", Georgia, serif;
 
   /* Colors: surfaces and text */
-  --color-bg: #ffffff;
-  --color-fg: #1d1d1d;
-  --color-fg-muted: #6b6b6b;
-  --color-line: #d9d9d9;
-  --color-surface: #f4f4f4;
-  --color-surface-strong: #e9e9e9;
+  --color-bg: #f6f3ee;
+  --color-fg: #1f1b17;
+  --color-fg-muted: #6a6159;
+  --color-line: #ded6cb;
+  --color-surface: #eee8df;
+  --color-surface-strong: #e3dbcf;
+  --color-paper: #fbfaf7;
 
   /* Accents */
-  --color-primary: #1d1d1d;
-  --color-primary-hover: #000000;
-  --color-on-primary: #ffffff;
-  --color-accent: #1d1d1d;
+  --color-primary: #1f1b17;
+  --color-primary-hover: #3b332c;
+  --color-on-primary: #f6f3ee;
+  --color-accent: #8a5a3c;
   --color-on-accent: #ffffff;
 
-  /* Dark blocks (lead forms, tiles) */
-  --color-inverse: #262626;
-  --color-on-inverse: #ffffff;
-  --color-on-inverse-muted: #b5b5b5;
+  /* Dark blocks (lead forms, tiles, footer) */
+  --color-inverse: #211d19;
+  --color-on-inverse: #f6f3ee;
+  --color-on-inverse-muted: #bfb4a8;
 
   /* States */
-  --color-success: #2e7d32;
-  --color-danger: #c62828;
+  --color-success: #4f6b47;
+  --color-danger: #b3261e;
+  --color-star: #c08a2b;
 
   /* Radii */
   --radius-control: 999px;
-  --radius-card: 16px;
-  --radius-media: 12px;
-  --radius-block: 24px;
+  --radius-card: 14px;
+  --radius-media: 10px;
+  --radius-block: 22px;
 
   /* Grid */
-  --container-site: 1240px;
+  --container-site: 1280px;
   --container-prose: 720px;
 
   /* Shadows */
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06);
-  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.25);
+  --shadow-card: 0 1px 2px rgb(31 27 23 / 0.04), 0 10px 30px rgb(31 27 23 / 0.07);
+  --shadow-modal: 0 24px 64px rgb(31 27 23 / 0.28);
 
   /* Animations */
   --animate-ticker: ticker 40s linear infinite;
@@ -55,6 +58,25 @@
       transform: translateX(-50%);
     }
   }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+  }
+}
+
+/*
+ * Headlines in the display serif. Unlayered on purpose: it wins over the font-weight utilities
+ * (font-semibold…) that components put on h1/h2 — the serif has a single weight.
+ */
+h1,
+h2,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-synthesis-weight: none;
+  letter-spacing: -0.008em;
 }
 
 @layer base {
@@ -69,11 +91,19 @@
   }
 
   h1,
-  h2,
+  h2 {
+    text-wrap: balance;
+    line-height: 1.04;
+  }
   h3 {
     text-wrap: balance;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
   }
 
   dialog::backdrop {
@@ -121,7 +151,7 @@
     @apply mt-5;
   }
   .prose-article h2 {
-    @apply mt-10 text-2xl font-semibold md:text-3xl;
+    @apply mt-12 text-3xl md:text-4xl;
   }
   .prose-article h3 {
     @apply mt-8 text-xl font-semibold;
@@ -130,6 +160,22 @@
     @apply list-disc space-y-2 pl-6;
   }
   .prose-article blockquote {
-    @apply border-l-4 border-fg pl-5 text-xl italic;
+    @apply border-l-2 border-accent pl-6 font-display text-2xl leading-snug md:text-3xl;
+  }
+
+  /* Small uppercase label above headings */
+  .eyebrow {
+    @apply text-xs font-semibold tracking-[0.18em] text-accent uppercase;
+  }
+
+  /* Subtle scroll reveal (CSS scroll-driven animations; browsers without support show content as is) */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+    }
   }
 }

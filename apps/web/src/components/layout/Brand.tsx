@@ -2,18 +2,25 @@ import Link from 'next/link';
 import { cn } from '@/lib/cn';
 import type { SocialLink } from '@/lib/content/types';
 
-export function Logo({ tagline, className }: { tagline?: string; className?: string }) {
+export function Logo({ tagline, className, dark }: { tagline?: string; className?: string; dark?: boolean }) {
   return (
     <Link href="/" className={cn('flex shrink-0 items-center gap-3', className)} aria-label="Alderline — home">
-      <span className="grid size-9 grid-cols-2 gap-0.5" aria-hidden>
-        <i className="rounded-sm bg-fg" />
-        <i className="rounded-sm bg-fg/60" />
-        <i className="rounded-sm bg-fg/60" />
-        <i className="rounded-sm bg-fg" />
+      <span
+        aria-hidden
+        className={cn(
+          'flex size-10 items-center justify-center rounded-[11px] font-display text-[26px] leading-none',
+          dark ? 'bg-on-inverse text-inverse' : 'bg-primary text-on-primary',
+        )}
+      >
+        A
       </span>
-      <span className="leading-tight">
-        <b className="block text-lg tracking-[0.12em]">ALDERLINE</b>
-        {tagline && <small className="hidden text-xs text-fg-muted sm:block">{tagline}</small>}
+      <span className="leading-none">
+        <span className="block font-display text-[27px] tracking-[-0.01em]">Alderline</span>
+        {tagline && (
+          <small className={cn('mt-1 hidden text-[11px] tracking-[0.14em] uppercase sm:block', dark ? 'text-on-inverse-muted' : 'text-fg-muted')}>
+            {tagline}
+          </small>
+        )}
       </span>
     </Link>
   );

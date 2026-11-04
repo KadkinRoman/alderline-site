@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ModalButton } from '@/components/modals/ModalButton';
 import { Container } from '@/components/ui/layout';
 import type { NavItem, SiteSettings, Topline as ToplineData } from '@/lib/content/types';
 import { Logo, Socials } from './Brand';
@@ -15,11 +16,11 @@ export function Header({ settings, navigation, topline }: Props) {
   return (
     <>
       {topline.enabled && (
-        <div className="bg-inverse text-sm text-on-inverse">
+        <div className="bg-inverse text-[13px] tracking-wide text-on-inverse">
           <Container className="flex min-h-9 items-center justify-center gap-3 py-1.5 text-center">
             <span>{topline.text}</span>
             {topline.link && (
-              <Link href={topline.link.href} className="underline underline-offset-2">
+              <Link href={topline.link.href} className="font-medium text-on-inverse underline decoration-on-inverse/40 underline-offset-4 hover:decoration-on-inverse">
                 {topline.link.label}
               </Link>
             )}
@@ -27,7 +28,7 @@ export function Header({ settings, navigation, topline }: Props) {
         </div>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-line bg-bg">
+      <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur-md backdrop-saturate-150">
         <Container className="flex h-16 items-center gap-6 xl:h-20">
           <Logo tagline={settings.tagline} />
 
@@ -35,13 +36,26 @@ export function Header({ settings, navigation, topline }: Props) {
 
           <div className="ml-auto flex shrink-0 items-center gap-4 xl:ml-0">
             <a href={settings.phoneHref} className="hidden text-right leading-tight md:block">
-              <b className="block whitespace-nowrap">{settings.phone}</b>
+              <b className="block font-semibold whitespace-nowrap">{settings.phone}</b>
               <small className="text-xs text-fg-muted">{settings.workHours}</small>
             </a>
+            <div className="hidden lg:block">
+              <ModalButton
+                size="sm"
+                modal={{
+                  type: 'lead',
+                  title: 'Book a free design consultation',
+                  text: 'A designer will call you back, answer your questions and set up a free measurement and 3D design.',
+                  form: { formId: 'zamer', submitLabel: 'Book my consultation' },
+                }}
+              >
+                Free consultation
+              </ModalButton>
+            </div>
             <a
               href={settings.phoneHref}
               aria-label={`Call: ${settings.phone}`}
-              className="flex size-10 items-center justify-center rounded-full border border-line md:hidden"
+              className="flex size-10 items-center justify-center rounded-full border border-line bg-paper md:hidden"
             >
               <span aria-hidden>☎</span>
             </a>

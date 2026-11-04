@@ -13,7 +13,7 @@ export function KitchenCard({ kitchen }: { kitchen: Kitchen }) {
   const discount = discountPercent(kitchen.price, kitchen.oldPrice);
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-card border border-line bg-bg">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-paper transition-shadow hover:shadow-card">
       <Link href={href} className="relative block" tabIndex={-1} aria-hidden>
         <Photo media={kitchen.gallery[0]} label="Kitchen photo" ratio="4/3" sizes="(min-width: 1280px) 300px, (min-width: 640px) 50vw, 85vw" rounded={false} />
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
@@ -24,7 +24,7 @@ export function KitchenCard({ kitchen }: { kitchen: Kitchen }) {
 
       <div className="flex flex-1 flex-col p-4 md:p-5">
         <span className="text-sm text-fg-muted">{kitchen.shortDesc}</span>
-        <h3 className="mt-1 text-lg font-semibold">
+        <h3 className="mt-1 font-display text-2xl">
           <Link href={href} className="hover:underline">
             {kitchen.name}
           </Link>

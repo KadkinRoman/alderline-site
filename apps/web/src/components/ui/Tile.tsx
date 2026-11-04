@@ -29,7 +29,7 @@ export function Tile({ title, text, icon, number, media, footer, href, more, dar
         </div>
       )}
       {number !== undefined && <div className="mb-3 text-2xl font-semibold text-fg-muted">{number}</div>}
-      <h3 className="text-lg font-semibold">{title}</h3>
+      <h3 className="text-lg font-semibold tracking-[-0.01em]">{title}</h3>
       {text && <div className={cn('mt-2 text-[15px]', dark ? 'text-on-inverse-muted' : 'text-fg-muted')}>{text}</div>}
       {footer}
       {more && <span className="mt-auto pt-4 text-sm font-medium">{more}</span>}
@@ -38,7 +38,7 @@ export function Tile({ title, text, icon, number, media, footer, href, more, dar
 
   const cls = cn(
     'flex h-full flex-col rounded-card p-5 md:p-6',
-    dark ? 'bg-inverse text-on-inverse' : 'bg-surface',
+    dark ? 'bg-inverse text-on-inverse' : 'border border-line/70 bg-paper',
     href && 'transition-shadow hover:shadow-card',
     className,
   );

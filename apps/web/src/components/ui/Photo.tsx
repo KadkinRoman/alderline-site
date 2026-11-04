@@ -28,7 +28,7 @@ export function Photo({ media, label, ratio, sizes = '100vw', priority, rounded 
       style={ratio ? { aspectRatio: ratio } : undefined}
       className={cn(absolute ? 'absolute' : 'relative', 'overflow-hidden bg-surface', rounded && 'rounded-media', className)}
     >
-      <Image src={media.url} alt={media.alt ?? label} fill sizes={sizes} priority={priority} className="object-cover" />
+      <Image src={media.url} alt={media.alt ?? label} fill sizes={sizes} priority={priority} className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
     </div>
   );
 }
