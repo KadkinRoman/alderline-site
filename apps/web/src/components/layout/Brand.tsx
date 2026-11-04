@@ -17,7 +17,7 @@ export function Logo({ tagline, className, dark }: { tagline?: string; className
       <span className="leading-none">
         <span className="block font-display text-[27px] tracking-[-0.01em]">Alderline</span>
         {tagline && (
-          <small className={cn('mt-1 hidden text-[11px] tracking-[0.14em] uppercase sm:block', dark ? 'text-on-inverse-muted' : 'text-fg-muted')}>
+          <small className={cn('mt-1 hidden text-[11px] tracking-[0.14em] uppercase sm:block xl:hidden 2xl:block', dark ? 'text-on-inverse-muted' : 'text-fg-muted')}>
             {tagline}
           </small>
         )}

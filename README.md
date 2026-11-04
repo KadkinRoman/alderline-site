@@ -17,6 +17,8 @@ Highlights:
 - **Lead pipeline** — every form posts to `/api/lead`: validation, honeypot and rate limits, a CRM call with an on-disk retry queue and Telegram alerts (disabled in the demo deployment).
 - **SEO basics** — `sitemap.xml`, `robots.txt`, Open Graph image, schema.org `HomeAndConstructionBusiness` JSON-LD.
 
+**Same engine, second vertical:** [Kestrow Motors](https://github.com/KadkinRoman/kestrow-site) (live: https://kestrow.193-233-216-209.sslip.io) re-skins this codebase for a pre-owned car dealership — inventory filters, vehicle pages and a monthly payment calculator.
+
 All content and images are demo data. Photographs are Creative Commons licensed; credits are listed on the `/credits` page.
 
 ## Quick start
